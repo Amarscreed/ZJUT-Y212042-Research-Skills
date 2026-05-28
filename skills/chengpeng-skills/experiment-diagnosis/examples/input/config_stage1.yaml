@@ -1,0 +1,86 @@
+# Stage 1: Pre-train Agent A (Vision Analyst) + Agent B (Draft Writer)
+# ====================================================================
+
+model:
+  agent_a:
+    name: CheXagent_ViT_L14
+    checkpoint: "checkpoints/chexagent-vit-L14.pt"
+    vit_embed_dim: 1024
+    visual_feature_pyramid:
+      levels: 3             # multi-scale: 1/4, 1/8, 1/16
+      out_channels: 768
+    mlp:
+      in_dim: 768
+      hidden_dim: 256
+      out_dim: 14            # CheXpert 14-class findings
+
+  agent_b:
+    name: Vicuna_7B_LoRA
+    checkpoint: "checkpoints/vicuna-7b-v1.5"
+    qformer:
+      num_queries: 32
+      hidden_dim: 768
+      num_heads: 8
+      num_layers: 6
+    dast:
+      num_tokens: 8
+      num_blocks: 4
+    dmsr:
+      num_clusters: 64
+      top_k: 5
+    lora:
+      r: 16
+      alpha: 32
+      target_modules: ["q_proj", "v_proj", "k_proj", "o_proj"]
+    llm_max_length: 512
+
+training:
+  learning_rate: 5.0e-5
+  batch_size: 16
+  gradient_accumulation_steps: 4
+  num_epochs: 10
+  warmup_steps: 500
+  weight_decay: 0.01
+  optimizer: "adamw"
+  adam_epsilon: 1.0e-8
+  max_grad_norm: 1.0
+  fp16: true
+  gradient_checkpointing: true
+
+loss:
+  weight_ce: 1.0          # classification cross-entropy
+  weight_vlp: 0.5         # CXR-CLIP contrastive loss
+  temperature: 0.07
+
+data:
+  dataset: "MIMIC-CXR"
+  train_path: "/data/mimic-cxr/train"
+  val_path: "/data/mimic-cxr/val"
+  test_path: "/data/mimic-cxr/test"
+  image_size: 224
+  max_text_length: 256
+  num_workers: 8
+  chexpert_labels:
+    - "Atelectasis"
+    - "Cardiomegaly"
+    - "Consolidation"
+    - "Edema"
+    - "Enlarged Cardiomediastinum"
+    - "Fracture"
+    - "Lung Lesion"
+    - "Lung Opacity"
+    - "Pleural Effusion"
+    - "Pleural Other"
+    - "Pneumonia"
+    - "Pneumothorax"
+    - "Support Devices"
+    - "No Finding"
+
+logging:
+  log_interval: 50
+  eval_interval: 500
+  save_interval: 1000
+  tensorboard_dir: "./runs/stage1"
+  checkpoint_dir: "./checkpoints/stage1"
+
+seed: 42

@@ -1,0 +1,15 @@
+# Method Components
+1. Vision Encoder (ViT-L/14)
+2. Q-Former cross-modal adapter
+3. Vicuna-7B + LoRA decoder
+4. DDx Critic reasoning chain
+5. Teaching Evaluator scoring
+6. Consensus module (confidence gate + weighted fusion)
+
+# GPU Budget
+1x A100 (80GB) for 48 hours
+
+# Existing Results
+- Full model: best
+- w/o DDx: -2.3%
+- w/o Teaching: -1.1%

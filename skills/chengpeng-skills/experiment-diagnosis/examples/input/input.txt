@@ -1,0 +1,7 @@
+# Training Log (example)
+Epoch 1/50 | Train Loss: 2.341 | Val Loss: 2.102 | LR: 1e-3
+Epoch 2/50 | Train Loss: 1.892 | Val Loss: 1.754 | LR: 1e-3
+...
+Epoch 8/50 | Train Loss: 0.234 | Val Loss: 0.892 | LR: 1e-3
+Epoch 9/50 | Train Loss: NaN   | Val Loss: NaN   | LR: 1e-3  <-- failure point
+...

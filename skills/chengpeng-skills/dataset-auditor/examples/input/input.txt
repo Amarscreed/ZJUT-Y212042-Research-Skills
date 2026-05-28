@@ -1,0 +1,5 @@
+patient_id,split,label,age,sex
+P001,train,0,45,M
+P002,train,1,52,F
+P001,test,0,45,M  # BUG: same patient in train AND test!
+...
