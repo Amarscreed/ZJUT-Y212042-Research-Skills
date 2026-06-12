@@ -1,9 +1,0 @@
-Reviewer 1:
-- The paper claims SOTA but only compares to 2 baselines.
-- Missing ablation study for the attention module.
-- Need to clarify the training procedure.
-
-Reviewer 2:
-- The dataset description is insufficient.
-- Why use ViT-L instead of ViT-B?
-- Statistical significance tests are missing.
